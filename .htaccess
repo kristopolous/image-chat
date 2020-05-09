@@ -1,0 +1,7 @@
+RewriteEngine On
+RewriteBase /
+
+Header set Access-Control-Allow-Origin "*"
+
+RewriteRule ^image/(.*)$  /image.php?id=$1 [L]
+
