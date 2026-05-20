@@ -6,11 +6,11 @@ $_pdo = false;
 function get_pdo() {
   global $_pdo;
   if(!$_pdo) {
-    $db_params = parse_ini_file('db.ini');
-    $db_host = $db_params['host'];
+    $env = parse_ini_file('.env');
+    $db_host = '127.0.0.1';
     $db   = 'imgchat';
-    $user = $db_params['user'];
-    $pass = $db_params['password'];
+    $user = 'imgchat';
+    $pass = $env['MYSQL_PASSWORD'];
     $charset = 'utf8mb4';
 
     $dsn = "mysql:host=$db_host;dbname=$db;charset=utf8";//$charset";
