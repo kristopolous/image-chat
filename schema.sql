@@ -1,0 +1,22 @@
+CREATE DATABASE IF NOT EXISTS imgchat
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE imgchat;
+
+CREATE TABLE image_chats (
+  id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  title      VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE comments (
+  id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  thread_id  INT UNSIGNED NOT NULL,
+  author     VARCHAR(20) NOT NULL,
+  body       VARCHAR(250) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (thread_id) REFERENCES image_chats(id) ON DELETE CASCADE,
+  INDEX (thread_id, created_at)
+) ENGINE=InnoDB;
