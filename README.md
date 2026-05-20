@@ -47,10 +47,6 @@ You'll need PHP, MySQL, pandoc, wkhtmltopdf, and ImageMagick or poppler-utils in
 - `schema.sql` — MySQL tables
 - `docker-compose.yml` + `setup.sh` — spins up MySQL with random credentials
 
-## Why pandoc instead of a headless browser
-
-Headless browsers are slow to start. pandoc + wkhtmltopdf does sub-second renders. You can also swap the backend without changing the pipeline — markdown in, image out. Someone wants LaTeX typesetting for version 2? It's a `--pdf-engine` flag away.
-
 ## FAQ
 
 - Q: Is this anonymous?
