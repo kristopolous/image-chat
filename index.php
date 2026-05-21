@@ -74,6 +74,11 @@ $threads = $pdo->query('SELECT id, title, created_at FROM image_chats ORDER BY c
   <h1>image-chat</h1>
   <p class="subhead">a comment thread that lives inside an image</p>
 
+  <p style="margin-bottom:24px; font-size:14px; line-height:1.6; color:#444;">
+    image-chat is a new technology. You create a chat that exists as an image
+    that you can include and embed in any site.
+  </p>
+
   <div class="steps">
     <div class="step">
       <div class="step-num">1</div>

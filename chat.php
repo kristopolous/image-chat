@@ -18,6 +18,8 @@ if (!$thread) {
 }
 
 $base = dirname($_SERVER['SCRIPT_NAME']);
+$baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http')
+  . '://' . $_SERVER['HTTP_HOST'] . $base;
 $restricted = $thread['password_hash'] !== null;
 $unlocked = $restricted && !empty($_SESSION['unlocked_' . $id]);
 $error = null;
@@ -144,14 +146,14 @@ $comments = $comments->fetchAll();
     <?php if ($restricted): ?>· 🔒 restricted<?php endif; ?>
   </div>
 
+  <div class="embed">
+    <a href="<?= $baseUrl ?>/<?= $id ?>"><?= $baseUrl ?>/<?= $id ?></a>
+  </div>
+
   <div style="margin: 16px 0;">
     <img src="<?= $base ?>/image/<?= $id ?>.png?v=<?= time() ?>" alt="<?= htmlspecialchars($thread['title']) ?>"
          width="827" height="1166"
          style="max-width:100%; height:auto; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,.12);">
-  </div>
-
-  <div class="embed">
-    embed: <code>&lt;img src="<?= $base ?>/image/<?= $id ?>.png" alt="<?= htmlspecialchars($thread['title']) ?>"&gt;</code>
   </div>
 
   <?php if ($error): ?><div class="error"><?= $error ?></div><?php endif; ?>
