@@ -1,4 +1,5 @@
 <?php
+@ini_set('pcre.jit', 0);
 require_once __DIR__ . '/db.php';
 
 $id = $_GET['id'] ?? null;
