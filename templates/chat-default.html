@@ -4,97 +4,46 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
+  @page { size: A6; margin: 0; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
     font-family: -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.5;
     color: #1a1a1a;
-    background: #f4f4f6;
-    padding: 20px;
-  }
-
-  .thread {
-    max-width: 640px;
-    margin: 0 auto;
+    background: #fff;
+    padding: 16px;
   }
 
   .thread-header {
-    background: #fff;
-    border-radius: 12px;
-    padding: 20px 24px;
-    margin-bottom: 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #333;
   }
 
   .thread-header h1 {
-    font-size: 18px;
-    font-weight: 600;
-    color: #111;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  p {
+    padding: 5px 8px;
     margin: 0;
-  }
-
-  .thread-meta {
-    font-size: 12px;
-    color: #888;
-    margin-top: 4px;
-  }
-
-  .comment {
-    background: #fff;
-    border-radius: 12px;
-    padding: 16px 20px;
-    margin-bottom: 10px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.08);
-  }
-
-  .comment-head {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    margin-bottom: 6px;
-  }
-
-  .comment-author {
-    font-weight: 600;
     font-size: 13px;
-    color: #333;
+    line-height: 1.5;
+    word-wrap: break-word;
   }
 
-  .comment-time {
-    font-size: 11px;
-    color: #aaa;
-  }
-
-  .comment-body {
-    font-size: 14px;
-    color: #333;
-    line-height: 1.6;
-  }
-
-  .comment-body p {
-    margin-bottom: 6px;
-  }
-
-  .comment-body p:last-child {
-    margin-bottom: 0;
-  }
-
-  hr {
-    border: none;
-    border-top: 1px solid #e8e8ea;
-    margin: 4px 0;
+  p:nth-child(odd) {
+    background: #f6f6f8;
   }
 </style>
 </head>
 <body>
-<div class="thread">
-  <div class="thread-header">
-    <h1>$title$</h1>
-    <div class="thread-meta">$if(subtitle)$$subtitle$$endif$</div>
-  </div>
-  $body$
+<div class="thread-header">
+  <h1>$title$</h1>
 </div>
+$body$
 </body>
 </html>

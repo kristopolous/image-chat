@@ -17,13 +17,14 @@ if (!$thread) {
   die('not found');
 }
 
+$base = dirname($_SERVER['SCRIPT_NAME']);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $author = trim($_POST['author'] ?? '');
   $body   = trim($_POST['body'] ?? '');
   if ($author !== '' && $body !== '') {
     $stmt = $pdo->prepare('INSERT INTO comments (thread_id, author, body) VALUES (?, ?, ?)');
     $stmt->execute([$id, $author, $body]);
-    $base = dirname($_SERVER['SCRIPT_NAME']);
     header('Location: ' . $base . '/chat.php?id=' . $id);
     exit;
   }
@@ -77,31 +78,29 @@ $comments = $comments->fetchAll();
 </style>
 </head>
 <body>
-  <div class="back"><a href="<?= dirname($_SERVER['SCRIPT_NAME']) ?>/">&larr; image-chat</a></div>
+  <div class="back"><a href="<?= $base ?>/">&larr; image-chat</a></div>
   <h1><?= htmlspecialchars($thread['title']) ?></h1>
+
+  <div style="margin: 16px 0;">
+    <img src="<?= $base ?>/image/<?= $id ?>.png" alt="<?= htmlspecialchars($thread['title']) ?>"
+         style="max-width:100%; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,.12);">
+  </div>
 
   <div class="embed">
     embed: <code>&lt;img src="<?= $base ?>/image/<?= $id ?>.png" alt="<?= htmlspecialchars($thread['title']) ?>"&gt;</code>
   </div>
 
-  <?php foreach ($comments as $c): ?>
-  <div class="comment">
-    <div class="comment-head">
-      <span class="comment-author"><?= htmlspecialchars($c['author']) ?></span>
-      <span class="comment-time"><?= $c['created_at'] ?></span>
-    </div>
-    <div class="comment-body"><?= htmlspecialchars($c['body']) ?></div>
-  </div>
-  <?php endforeach; ?>
-
-  <?php if (!$comments): ?>
-  <p style="color:#888;">no comments yet</p>
-  <?php endif; ?>
-
   <form method="post">
-    <input type="text" name="author" placeholder="your name" maxlength="20" required>
+    <input type="text" name="author" id="author" placeholder="your name" maxlength="20" required>
     <textarea name="body" placeholder="write something..." maxlength="250" required></textarea>
     <button type="submit">comment</button>
   </form>
+
+  <script>
+    const author = document.getElementById('author');
+    const saved = localStorage.getItem('ichat_author');
+    if (saved) author.value = saved;
+    author.addEventListener('input', () => localStorage.setItem('ichat_author', author.value));
+  </script>
 </body>
 </html>

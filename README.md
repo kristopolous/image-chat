@@ -36,7 +36,7 @@ php -S localhost:8080
 # Visit localhost:8080, create a chat, grab the embed code
 ```
 
-You'll need PHP, MySQL, pandoc, wkhtmltopdf, and ImageMagick or poppler-utils installed for the render pipeline.
+You'll need PHP, MySQL, pandoc, weasyprint, and ImageMagick or poppler-utils installed for the render pipeline.
 
 ## What's here
 

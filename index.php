@@ -1,13 +1,13 @@
 <?php
 require_once __DIR__ . '/db.php';
 $pdo = get_pdo();
+$base = dirname($_SERVER['SCRIPT_NAME']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'])) {
   $title = trim($_POST['title']);
   if ($title !== '') {
     $stmt = $pdo->prepare('INSERT INTO image_chats (title) VALUES (?)');
     $stmt->execute([$title]);
-    $base = dirname($_SERVER['SCRIPT_NAME']);
     header('Location: ' . $base . '/chat.php?id=' . $pdo->lastInsertId());
     exit;
   }
@@ -63,7 +63,7 @@ $threads = $pdo->query('SELECT id, title, created_at FROM image_chats ORDER BY c
   <ul>
     <?php foreach ($threads as $t): ?>
     <li>
-      <a href="/chat.php?id=<?= $t['id'] ?>"><?= htmlspecialchars($t['title']) ?></a>
+      <a href="<?= $base ?>/chat.php?id=<?= $t['id'] ?>"><?= htmlspecialchars($t['title']) ?></a>
       <div class="meta"><?= $t['created_at'] ?></div>
     </li>
     <?php endforeach; ?>
