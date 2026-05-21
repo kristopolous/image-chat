@@ -13,7 +13,7 @@ function get_pdo() {
     $pass = $env['MYSQL_PASSWORD'];
     $charset = 'utf8mb4';
 
-    $dsn = "mysql:host=$db_host;dbname=$db;charset=utf8";//$charset";
+    $dsn = "mysql:host=$db_host;port=33065;dbname=$db;charset=utf8";//$charset";
     $options = [
       PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
       PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
