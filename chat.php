@@ -42,10 +42,12 @@ if ($restricted && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['unlock
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_title'])) {
   $newTitle = trim($_POST['edit_title']);
+  $newStyle = trim($_POST['edit_style'] ?? '');
   if ($newTitle !== '') {
-    $stmt = $pdo->prepare('UPDATE image_chats SET title = ? WHERE id = ?');
-    $stmt->execute([$newTitle, $id]);
+    $stmt = $pdo->prepare('UPDATE image_chats SET title = ?, style = ? WHERE id = ?');
+    $stmt->execute([$newTitle, $newStyle ?: 'default', $id]);
     $thread['title'] = $newTitle;
+    $thread['style'] = $newStyle ?: 'default';
     clear_cache($id);
   }
 }
@@ -62,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['author']) && (!$restr
   }
 }
 
-$comments = $pdo->prepare('SELECT * FROM comments WHERE thread_id = ? ORDER BY created_at DESC');
+$comments = $pdo->prepare('SELECT * FROM comments WHERE thread_id = ? ORDER BY created_at ASC');
 $comments->execute([$id]);
 $comments = $comments->fetchAll();
 ?>
@@ -86,7 +88,9 @@ $comments = $comments->fetchAll();
   .pencil:hover { color:#555; }
   .title-edit { display:none; margin-bottom: 4px; }
   .title-edit input { padding:6px 10px; font-size:15px; border:1px solid #ccc; border-radius:6px; width:300px; }
+  .title-edit select { padding:6px 10px; font-size:13px; border:1px solid #ccc; border-radius:6px; }
   .title-edit button { padding:6px 14px; font-size:13px; border:none; border-radius:6px; background:#333; color:#fff; cursor:pointer; }
+  .title-edit { border-top: none !important; margin-top: 0 !important; padding-top: 0 !important; }
   .back { font-size: 13px; margin-bottom: 20px; display: block; color: #888; }
   .back a { color: #555; }
 
@@ -127,6 +131,12 @@ $comments = $comments->fetchAll();
   </div>
   <form class="title-edit" id="title-form" method="post">
     <input type="text" name="edit_title" id="title-input" value="<?= htmlspecialchars($thread['title']) ?>" required>
+    <select name="edit_style">
+      <option value="default" <?= $thread['style'] === 'default' ? 'selected' : '' ?>>default</option>
+      <option value="vintage" <?= $thread['style'] === 'vintage' ? 'selected' : '' ?>>vintage</option>
+      <option value="candy" <?= $thread['style'] === 'candy' ? 'selected' : '' ?>>candy</option>
+      <option value="group-text" <?= $thread['style'] === 'group-text' ? 'selected' : '' ?>>group-text</option>
+    </select>
     <button type="submit">update</button>
   </form>
   <div class="meta-info" style="font-size:12px; color:#888;">

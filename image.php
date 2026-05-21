@@ -58,15 +58,28 @@ if (!$thread) {
   die('not found');
 }
 
-$stmt = $pdo->prepare('SELECT * FROM comments WHERE thread_id = ? ORDER BY created_at DESC');
+$stmt = $pdo->prepare('SELECT * FROM comments WHERE thread_id = ? ORDER BY created_at ASC');
 $stmt->execute([$id]);
 $comments = $stmt->fetchAll();
 
 // Build markdown — each comment is one line
 $md = '';
-foreach ($comments as $c) {
-  $date = date('Y-m-d H:i', strtotime($c['created_at']));
-  $md .= htmlspecialchars($date . ' <' . $c['author'] . '> ' . $c['body']) . "\n\n";
+if ($thread['style'] === 'group-text') {
+  foreach ($comments as $c) {
+    $date = date('Y-m-d H:i', strtotime($c['created_at']));
+    $author = htmlspecialchars($c['author']);
+    $body   = htmlspecialchars($c['body']);
+    $md .=
+      '<div class="msg">' . "\n" .
+      '  <div class="bubble">' . $body . '</div>' . "\n" .
+      '  <div class="meta">' . $author . ' ' . $date . '</div>' . "\n" .
+      '</div>' . "\n\n";
+  }
+} else {
+  foreach ($comments as $c) {
+    $date = date('Y-m-d H:i', strtotime($c['created_at']));
+    $md .= htmlspecialchars($date . ' <' . $c['author'] . '> ' . $c['body']) . "\n\n";
+  }
 }
 
 // Temp files

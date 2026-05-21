@@ -14,26 +14,68 @@ body {
   border-bottom: 1px solid #e8e8ea;
 }
 
+.thread-body {
+}
+
 .thread-header h1 {
   font-size: 15px;
   font-weight: 600;
   color: #000;
 }
 
-p {
-  max-width: 80%;
-  padding: 10px 14px;
-  margin: 0 0 8px 0;
+.msg {
+  margin-bottom: 16px;
+  clear: both;
+}
+
+.msg .bubble {
+  display: inline-block;
+  padding: 8px 20px !important;
   font-size: 13px;
   line-height: 1.5;
   word-wrap: break-word;
-  border-radius: 18px;
+  border-radius: 14px;
   background: #e8e8ea;
   color: #000;
+  position: relative;
 }
 
-p:nth-child(odd) {
+.msg .bubble::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: -7px;
+  border: 7px solid transparent;
+  border-right-color: #e8e8ea;
+  border-left: 0;
+}
+
+.msg .meta {
+  font-size: 11px;
+  color: #8e8e93;
+  margin-top: 2px;
+  padding-left: 4px;
+}
+
+.msg:nth-child(odd) {
+  float: right;
+  text-align: right;
+}
+
+.msg:nth-child(odd) .bubble {
   background: #007aff;
   color: #fff;
-  margin-left: auto;
+}
+
+.msg:nth-child(odd) .bubble::after {
+  left: auto;
+  right: -7px;
+  border-left-color: #007aff;
+  border-right: 0;
+}
+
+.msg:nth-child(odd) .meta {
+  text-align: right;
+  padding-right: 4px;
+  padding-left: 0;
 }

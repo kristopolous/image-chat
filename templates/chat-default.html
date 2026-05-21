@@ -6,6 +6,20 @@
 <style>
   @page { size: A6; margin: 0; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+  .thread-header { flex-shrink: 0; }
+  .thread-body {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
 </style>
 </head>
 <body>
