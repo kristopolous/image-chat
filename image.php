@@ -1,9 +1,11 @@
 <?php
 @ini_set('pcre.jit', 0);
+error_log('image.php: start id=' . ($_GET['id'] ?? 'none'));
 require_once __DIR__ . '/db.php';
 
 $id = $_GET['id'] ?? null;
 if (!$id) {
+  error_log('image.php: missing id');
   http_response_code(400);
   die('missing id');
 }
@@ -18,10 +20,13 @@ $content_types = [
 if (preg_match('/^(.+)\.(png|webp|avif)$/i', $id, $m)) {
   $id = $m[1];
   $fmt = strtolower($m[2]);
+  error_log("image.php: fmt from extension id=$id fmt=$fmt");
 } elseif (isset($_GET['fmt'])) {
   $fmt = strtolower($_GET['fmt']);
+  error_log("image.php: fmt from query id=$id fmt=$fmt");
 }
 if (!isset($content_types[$fmt])) {
+  error_log("image.php: unsupported fmt=$fmt");
   http_response_code(415);
   die('unsupported format');
 }
@@ -50,19 +55,24 @@ if (file_exists($cacheFile)) {
 }
 
 // No valid cache — build from scratch
+error_log('image.php: cache miss, building');
 $pdo = get_pdo();
 $stmt = $pdo->prepare('SELECT * FROM image_chats WHERE id = ?');
 $stmt->execute([$id]);
 $thread = $stmt->fetch();
 if (!$thread) {
+  error_log("image.php: thread id=$id not found");
   http_response_code(404);
   die('not found');
 }
+error_log('image.php: found thread style=' . ($thread['style'] ?? 'default') . ' title=' . $thread['title']);
 
 $limit = $thread['style'] === 'group-text' ? 10 : 25;
+error_log("image.php: limit=$limit");
 $stmt = $pdo->prepare("SELECT * FROM comments WHERE thread_id = ? ORDER BY created_at DESC LIMIT $limit");
 $stmt->execute([$id]);
 $comments = array_reverse($stmt->fetchAll());
+error_log('image.php: comments count=' . count($comments));
 
 // Build markdown — each comment is one line
 $md = '';
@@ -116,6 +126,7 @@ $cmd = sprintf(
   $styleOpts
 );
 exec($cmd, $output, $ret);
+error_log("image.php: pandoc ret=$ret output=" . implode('; ', $output));
 if ($ret !== 0) {
   unlink($mdFile);
   if ($styleSheet) @unlink($styleSheet);
@@ -132,6 +143,7 @@ exec(
   $output, $ret
 );
 $pngFile = $pngPrefix . '-1.png';
+error_log("image.php: pdftoppm ret=$ret pngFile=$pngFile exists=" . (file_exists($pngFile) ? 'yes' : 'no'));
 if ($ret !== 0 || !file_exists($pngFile)) {
   unlink($mdFile); unlink($pdfFile);
   if ($styleSheet) @unlink($styleSheet);
@@ -168,8 +180,10 @@ if ($qrFile && file_exists($qrFile)) {
       escapeshellarg($finalFile)
     ),
   $output, $ret);
+  error_log('image.php: composite OK');
   $outFile = ($ret === 0) ? $finalFile : $pngFile;
 } else {
+  error_log('image.php: no QR, using pngFile');
   $outFile = $pngFile;
 }
 
@@ -186,11 +200,17 @@ if ($fmt !== 'png') {
 }
 
 // Save to cache and serve
-copy($outFile, $cacheFile);
+if (!is_dir(__DIR__ . '/cache')) {
+  error_log('image.php: creating cache dir');
+  mkdir(__DIR__ . '/cache', 0755, true);
+}
+$copied = copy($outFile, $cacheFile);
+error_log("image.php: cache copy from=$outFile to=$cacheFile result=" . ($copied ? 'ok' : 'FAIL'));
 header('Content-Type: ' . $content_types[$fmt]);
 header('Cache-Control: public, max-age=31536000, immutable');
 http_response_code(200);
-readfile($cacheFile);
+$sent = readfile($cacheFile);
+error_log("image.php: readfile sent=$sent bytes");
 
 // Cleanup
 unlink($mdFile);
