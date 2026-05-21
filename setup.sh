@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if ! php -m | grep -qi pdo_mysql; then
+  echo "installing php-mysql ..."
+  sudo apt-get update && sudo apt-get install -y php-mysql || true
+fi
+
 if ! command -v docker &>/dev/null; then
   echo "installing docker ..."
   curl -fsSL https://get.docker.com | sh
