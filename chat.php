@@ -36,7 +36,8 @@ function clear_cache($id) {
 if ($restricted && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['unlock_pass'])) {
   if (password_verify($_POST['unlock_pass'], $thread['password_hash'])) {
     $_SESSION['unlocked_' . $id] = true;
-    $unlocked = true;
+    header('Location: ' . $base . '/' . $id);
+    exit;
   } else {
     $error = 'wrong password';
   }
@@ -48,9 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_title'])) {
   if ($newTitle !== '') {
     $stmt = $pdo->prepare('UPDATE image_chats SET title = ?, style = ? WHERE id = ?');
     $stmt->execute([$newTitle, $newStyle ?: 'default', $id]);
-    $thread['title'] = $newTitle;
-    $thread['style'] = $newStyle ?: 'default';
     clear_cache($id);
+    header('Location: ' . $base . '/' . $id);
+    exit;
   }
 }
 
