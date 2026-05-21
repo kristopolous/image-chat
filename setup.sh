@@ -6,6 +6,11 @@ if ! php -m | grep -qi pdo_mysql; then
   sudo apt-get update && sudo apt-get install -y php-mysql || true
 fi
 
+if ! command -v weasyprint &>/dev/null; then
+  echo "installing weasyprint ..."
+  sudo apt-get update && sudo apt-get install -y weasyprint || true
+fi
+
 if ! command -v docker &>/dev/null; then
   echo "installing docker ..."
   curl -fsSL https://get.docker.com | sh
