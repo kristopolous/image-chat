@@ -127,6 +127,10 @@ $comments = $comments->fetchAll();
 </head>
 <body>
   <div class="back"><a href="<?= $base ?>/">&larr; image-chat</a></div>
+  <p style="font-size:13px; color:#666; margin-bottom:16px; line-height:1.5;">
+    This is an image-chat — a comment thread that lives inside an image.
+    Post a comment below. Refresh the image URL to see it appear on the image itself.
+  </p>
   <div class="title-row">
     <h1 id="title-display"><?= htmlspecialchars($thread['title']) ?></h1>
     <span class="pencil" id="pencil">✏️</span>
@@ -146,8 +150,8 @@ $comments = $comments->fetchAll();
     <?php if ($restricted): ?>· 🔒 restricted<?php endif; ?>
   </div>
 
-  <div class="embed">
-    <a href="<?= $baseUrl ?>/<?= $id ?>"><?= $baseUrl ?>/<?= $id ?></a>
+  <div class="embed" style="text-align:center;">
+    <strong><a href="<?= $baseUrl ?>/image/<?= $id ?>.png"><?= $baseUrl ?>/image/<?= $id ?>.png</a></strong>
   </div>
 
   <div style="margin: 16px 0;">
