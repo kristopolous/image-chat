@@ -1,0 +1,39 @@
+body {
+  font-family: -apple-system, 'Helvetica Neue', 'SF Pro Text', Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #1a1a1a;
+  background: #fff;
+  padding: 16px;
+}
+
+.thread-header {
+  text-align: center;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #e8e8ea;
+}
+
+.thread-header h1 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #000;
+}
+
+p {
+  max-width: 80%;
+  padding: 10px 14px;
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  line-height: 1.5;
+  word-wrap: break-word;
+  border-radius: 18px;
+  background: #e8e8ea;
+  color: #000;
+}
+
+p:nth-child(odd) {
+  background: #007aff;
+  color: #fff;
+  margin-left: auto;
+}

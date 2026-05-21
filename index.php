@@ -116,6 +116,7 @@ $threads = $pdo->query('SELECT id, title, created_at FROM image_chats ORDER BY c
           <option value="default">default</option>
           <option value="vintage">vintage</option>
           <option value="candy">candy</option>
+          <option value="group-text">group-text</option>
         </select>
       </div>
     </form>

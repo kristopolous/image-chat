@@ -22,6 +22,15 @@ $restricted = $thread['password_hash'] !== null;
 $unlocked = $restricted && !empty($_SESSION['unlocked_' . $id]);
 $error = null;
 
+$cacheDir = __DIR__ . '/cache';
+function clear_cache($id) {
+  global $cacheDir;
+  foreach (['png', 'webp', 'avif'] as $ext) {
+    $f = "$cacheDir/$id.$ext";
+    if (file_exists($f)) unlink($f);
+  }
+}
+
 if ($restricted && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['unlock_pass'])) {
   if (password_verify($_POST['unlock_pass'], $thread['password_hash'])) {
     $_SESSION['unlocked_' . $id] = true;
@@ -37,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_title'])) {
     $stmt = $pdo->prepare('UPDATE image_chats SET title = ? WHERE id = ?');
     $stmt->execute([$newTitle, $id]);
     $thread['title'] = $newTitle;
+    clear_cache($id);
   }
 }
 
@@ -46,12 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['author']) && (!$restr
   if ($author !== '' && $body !== '') {
     $stmt = $pdo->prepare('INSERT INTO comments (thread_id, author, body) VALUES (?, ?, ?)');
     $stmt->execute([$id, $author, $body]);
+    clear_cache($id);
     header('Location: ' . $base . '/' . $id);
     exit;
   }
 }
 
-$comments = $pdo->prepare('SELECT * FROM comments WHERE thread_id = ? ORDER BY created_at ASC');
+$comments = $pdo->prepare('SELECT * FROM comments WHERE thread_id = ? ORDER BY created_at DESC');
 $comments->execute([$id]);
 $comments = $comments->fetchAll();
 ?>

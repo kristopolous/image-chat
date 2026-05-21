@@ -7,7 +7,7 @@ if (!$id) {
   die('missing id');
 }
 
-$fmt = $_GET['fmt'] ?? 'png';
+$fmt = 'png';
 $content_types = [
   'png'  => 'image/png',
   'webp' => 'image/webp',
@@ -17,12 +17,38 @@ $content_types = [
 if (preg_match('/^(.+)\.(png|webp|avif)$/i', $id, $m)) {
   $id = $m[1];
   $fmt = strtolower($m[2]);
+} elseif (isset($_GET['fmt'])) {
+  $fmt = strtolower($_GET['fmt']);
 }
 if (!isset($content_types[$fmt])) {
   http_response_code(415);
   die('unsupported format');
 }
 
+$cacheFile = __DIR__ . '/cache/' . $id . '.' . $fmt;
+
+// Serve cached if fresh
+if (file_exists($cacheFile)) {
+  $cacheTime = filemtime($cacheFile);
+  $pdo = get_pdo();
+  $stmt = $pdo->prepare('SELECT MAX(created_at) FROM comments WHERE thread_id = ?');
+  $stmt->execute([$id]);
+  $latestComment = $stmt->fetchColumn();
+  $latest = $latestComment ? strtotime($latestComment) : 0;
+
+  $stmt = $pdo->prepare('SELECT UNIX_TIMESTAMP(created_at) FROM image_chats WHERE id = ?');
+  $stmt->execute([$id]);
+  $created = (int)$stmt->fetchColumn();
+
+  if ($cacheTime >= max($created, $latest)) {
+    header('Content-Type: ' . $content_types[$fmt]);
+    header('Cache-Control: public, max-age=31536000, immutable');
+    readfile($cacheFile);
+    exit;
+  }
+}
+
+// No valid cache — build from scratch
 $pdo = get_pdo();
 $stmt = $pdo->prepare('SELECT * FROM image_chats WHERE id = ?');
 $stmt->execute([$id]);
@@ -32,7 +58,7 @@ if (!$thread) {
   die('not found');
 }
 
-$stmt = $pdo->prepare('SELECT * FROM comments WHERE thread_id = ? ORDER BY created_at ASC');
+$stmt = $pdo->prepare('SELECT * FROM comments WHERE thread_id = ? ORDER BY created_at DESC');
 $stmt->execute([$id]);
 $comments = $stmt->fetchAll();
 
@@ -144,20 +170,12 @@ if ($fmt !== 'png') {
   if ($ret === 0) $outFile = $fmtFile;
 }
 
-// Cache headers — last comment timestamp or thread creation
-$latest = $thread['created_at'];
-if ($comments) {
-  $last = end($comments);
-  $latest = $last['created_at'];
-}
-$etag = '"' . md5($latest . count($comments)) . '"';
-
+// Save to cache and serve
+copy($outFile, $cacheFile);
 header('Content-Type: ' . $content_types[$fmt]);
-header('Cache-Control: public, must-revalidate, max-age=3600');
-header('ETag: ' . $etag);
-header('Last-Modified: ' . gmdate('D, d M Y H:i:s', strtotime($latest)) . ' GMT');
+header('Cache-Control: public, max-age=31536000, immutable');
 http_response_code(200);
-readfile($outFile);
+readfile($cacheFile);
 
 // Cleanup
 unlink($mdFile);

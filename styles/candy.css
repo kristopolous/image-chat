@@ -1,0 +1,37 @@
+body {
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #ff69b4;
+  background: #0d0d0d;
+  padding: 20px;
+}
+
+.thread-header {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+}
+
+.thread-header h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ff1493;
+  text-shadow: 0 0 6px rgba(255,20,147,.5);
+  margin: 0 0 6px 0;
+  text-align: center;
+}
+
+p {
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  word-wrap: break-word;
+  background: #1a1a1a;
+  color: #ffb6c1;
+}
+
+p:nth-child(odd) {
+  background: #222;
+  color: #ff69b4;
+}
