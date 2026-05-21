@@ -58,9 +58,10 @@ if (!$thread) {
   die('not found');
 }
 
-$stmt = $pdo->prepare('SELECT * FROM comments WHERE thread_id = ? ORDER BY created_at ASC');
+$limit = $thread['style'] === 'group-text' ? 10 : 25;
+$stmt = $pdo->prepare("SELECT * FROM comments WHERE thread_id = ? ORDER BY created_at DESC LIMIT $limit");
 $stmt->execute([$id]);
-$comments = $stmt->fetchAll();
+$comments = array_reverse($stmt->fetchAll());
 
 // Build markdown — each comment is one line
 $md = '';

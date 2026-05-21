@@ -15,6 +15,7 @@ body {
 }
 
 .thread-body {
+  height: 1090px;
 }
 
 .thread-header h1 {

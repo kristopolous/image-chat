@@ -11,12 +11,24 @@ body {
   margin-bottom: 12px;
   padding-bottom: 8px;
   border-bottom: 1px solid #0f0;
+  text-align: center;
+}
+
+.thread-body {
+  height: 1090px;
 }
 
 .thread-header h1 {
   font-size: 15px;
   font-weight: 700;
-  text-transform: uppercase;
+}
+
+.thread-header h1::before {
+  content: '#';
+}
+
+.thread-header h1::after {
+  content: ' on ImageNet';
 }
 
 p {

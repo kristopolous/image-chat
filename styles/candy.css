@@ -12,6 +12,10 @@ body {
   padding-bottom: 10px;
 }
 
+.thread-body {
+  height: 1071px;
+}
+
 .thread-header h1 {
   font-size: 18px;
   font-weight: 700;
