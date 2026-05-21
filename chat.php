@@ -83,7 +83,8 @@ $comments = $comments->fetchAll();
 
   <div style="margin: 16px 0;">
     <img src="<?= $base ?>/image/<?= $id ?>.png" alt="<?= htmlspecialchars($thread['title']) ?>"
-         style="max-width:100%; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,.12);">
+         width="827" height="1166"
+         style="max-width:100%; height:auto; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,.12);">
   </div>
 
   <div class="embed">
