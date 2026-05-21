@@ -18,9 +18,21 @@ if (!$thread) {
 }
 
 $base = dirname($_SERVER['SCRIPT_NAME']);
+$restricted = $thread['password_hash'] !== null;
+$unlocked = $restricted && !empty($_SESSION['unlocked_' . $id]);
+$error = null;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $author = trim($_POST['author'] ?? '');
+if ($restricted && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['unlock_pass'])) {
+  if (password_verify($_POST['unlock_pass'], $thread['password_hash'])) {
+    $_SESSION['unlocked_' . $id] = true;
+    $unlocked = true;
+  } else {
+    $error = 'wrong password';
+  }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['author']) && (!$restricted || $unlocked)) {
+  $author = trim($_POST['author']);
   $body   = trim($_POST['body'] ?? '');
   if ($author !== '' && $body !== '') {
     $stmt = $pdo->prepare('INSERT INTO comments (thread_id, author, body) VALUES (?, ?, ?)');
@@ -50,6 +62,7 @@ $comments = $comments->fetchAll();
   h1 { font-size: 22px; margin-bottom: 4px; }
   .back { font-size: 13px; margin-bottom: 20px; display: block; color: #888; }
   .back a { color: #555; }
+
   .embed { font-size: 13px; margin-bottom: 24px; }
   .embed code {
     background: #f4f4f6; padding: 6px 10px; border-radius: 6px;
@@ -75,11 +88,17 @@ $comments = $comments->fetchAll();
     border-radius: 8px; background: #333; color: #fff; cursor: pointer;
   }
   form button:hover { background: #555; }
+  .error { color: #c33; font-size: 13px; margin-bottom: 8px; }
+  .restricted-note { font-size: 12px; color: #888; margin-top: 4px; }
 </style>
 </head>
 <body>
   <div class="back"><a href="<?= $base ?>/">&larr; image-chat</a></div>
   <h1><?= htmlspecialchars($thread['title']) ?></h1>
+  <div class="meta-info" style="font-size:12px; color:#888;">
+    style: <?= htmlspecialchars($thread['style'] ?? 'default') ?>
+    <?php if ($restricted): ?>· 🔒 restricted<?php endif; ?>
+  </div>
 
   <div style="margin: 16px 0;">
     <img src="<?= $base ?>/image/<?= $id ?>.png" alt="<?= htmlspecialchars($thread['title']) ?>"
@@ -91,17 +110,28 @@ $comments = $comments->fetchAll();
     embed: <code>&lt;img src="<?= $base ?>/image/<?= $id ?>.png" alt="<?= htmlspecialchars($thread['title']) ?>"&gt;</code>
   </div>
 
+  <?php if ($error): ?><div class="error"><?= $error ?></div><?php endif; ?>
+
+  <?php if ($restricted && !$unlocked): ?>
+  <form method="post">
+    <input type="text" name="unlock_pass" placeholder="password required to comment" required autofocus>
+    <button type="submit">unlock</button>
+  </form>
+  <?php else: ?>
   <form method="post">
     <input type="text" name="author" id="author" placeholder="your name" maxlength="20" required>
     <textarea name="body" placeholder="write something..." maxlength="250" required></textarea>
     <button type="submit">comment</button>
   </form>
+  <?php endif; ?>
 
   <script>
     const author = document.getElementById('author');
-    const saved = localStorage.getItem('ichat_author');
-    if (saved) author.value = saved;
-    author.addEventListener('input', () => localStorage.setItem('ichat_author', author.value));
+    if (author) {
+      const saved = localStorage.getItem('ichat_author');
+      if (saved) author.value = saved;
+      author.addEventListener('input', () => localStorage.setItem('ichat_author', author.value));
+    }
   </script>
 </body>
 </html>

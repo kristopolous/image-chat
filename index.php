@@ -6,9 +6,14 @@ $base = dirname($_SERVER['SCRIPT_NAME']);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'])) {
   $title = trim($_POST['title']);
   if ($title !== '') {
-    $stmt = $pdo->prepare('INSERT INTO image_chats (title) VALUES (?)');
-    $stmt->execute([$title]);
-    header('Location: ' . $base . '/chat.php?id=' . $pdo->lastInsertId());
+    $hash = null;
+    $pass = trim($_POST['password'] ?? '');
+    if ($pass !== '') $hash = password_hash($pass, PASSWORD_DEFAULT);
+    $style = trim($_POST['style'] ?? '');
+    if ($style === '') $style = 'default';
+    $stmt = $pdo->prepare('INSERT INTO image_chats (title, password_hash, style) VALUES (?, ?, ?)');
+    $stmt->execute([$title, $hash, $style]);
+    header('Location: ' . $base . '/image-chat/' . $pdo->lastInsertId());
     exit;
   }
 }
@@ -25,26 +30,41 @@ $threads = $pdo->query('SELECT id, title, created_at FROM image_chats ORDER BY c
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    max-width: 600px; margin: 40px auto; padding: 0 20px;
+    max-width: 640px; margin: 40px auto; padding: 0 20px;
     color: #1a1a1a;
+    line-height: 1.6;
   }
-  h1 { font-size: 24px; margin-bottom: 24px; }
-  h2 { font-size: 18px; margin-bottom: 12px; }
-  form { margin-bottom: 32px; }
-  input[type="text"] {
-    width: 100%; padding: 10px 14px; font-size: 15px;
-    border: 1px solid #ccc; border-radius: 8px; margin-bottom: 10px;
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+  .subhead { font-size: 15px; color: #666; margin-bottom: 32px; }
+
+  .steps { margin-bottom: 32px; }
+  .step { display: flex; gap: 14px; margin-bottom: 14px; padding: 14px 16px; background: #f4f4f6; border-radius: 10px; }
+  .step-num { font-weight: 700; font-size: 14px; color: #888; min-width: 24px; }
+  .step-body { font-size: 14px; color: #333; }
+  .step-body strong { color: #111; }
+  .step-body code { background: #e4e4e6; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+
+  .divider { border: none; border-top: 1px solid #ddd; margin: 28px 0; }
+
+  .create-box { margin-bottom: 28px; }
+  .create-box label { font-size: 14px; font-weight: 600; display: block; margin-bottom: 8px; }
+  .create-row { display: flex; gap: 8px; }
+  .create-row input[type="text"] {
+    flex: 1; padding: 10px 14px; font-size: 15px;
+    border: 1px solid #ccc; border-radius: 8px;
   }
-  button {
+  .create-row button {
     padding: 10px 20px; font-size: 14px; border: none;
-    border-radius: 8px; background: #333; color: #fff;
-    cursor: pointer;
+    border-radius: 8px; background: #333; color: #fff; cursor: pointer;
+    white-space: nowrap;
   }
-  button:hover { background: #555; }
+  .create-row button:hover { background: #555; }
+
+  h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
   ul { list-style: none; }
   li {
     padding: 12px 16px; background: #f4f4f6; border-radius: 8px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   li a { color: #333; text-decoration: none; font-weight: 500; }
   li a:hover { text-decoration: underline; }
@@ -53,17 +73,59 @@ $threads = $pdo->query('SELECT id, title, created_at FROM image_chats ORDER BY c
 </head>
 <body>
   <h1>image-chat</h1>
+  <p class="subhead">a comment thread that lives inside an image</p>
 
-  <form method="post">
-    <input type="text" name="title" placeholder="chat title" required autofocus>
-    <button type="submit">create</button>
-  </form>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Create a chat</strong> — give it a title, get an <code>&lt;img&gt;</code> tag
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Embed the image</strong> anywhere — GitHub README, forum post, email signature, wherever images work
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>People scan the QR</strong> in the corner, land on a comment page, write something
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <strong>Refresh the image</strong> — their comment is now rendered directly onto it. The image <em>is</em> the thread.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="create-box">
+    <label for="title">start one</label>
+    <form method="post" style="margin-bottom: 28px;">
+      <input type="text" name="title" id="title" placeholder="name your chat" required autofocus style="width:100%; padding:10px 14px; font-size:15px; border:1px solid #ccc; border-radius:8px; margin-bottom:8px;">
+      <div style="display:flex; gap:8px; margin-bottom:8px;">
+        <input type="text" name="password" placeholder="password (optional, for restricted posting)" style="flex:1; padding:10px 14px; font-size:15px; border:1px solid #ccc; border-radius:8px;">
+        <button type="submit" style="padding:10px 20px; font-size:14px; border:none; border-radius:8px; background:#333; color:#fff; cursor:pointer; white-space:nowrap;">create</button>
+      </div>
+      <div>
+        <select name="style" style="width:100%; padding:10px 14px; font-size:14px; border:1px solid #ccc; border-radius:8px;">
+          <option value="default">default</option>
+          <option value="vintage">vintage</option>
+        </select>
+      </div>
+    </form>
+  </div>
 
   <h2>recent image-chats</h2>
   <ul>
     <?php foreach ($threads as $t): ?>
     <li>
-      <a href="<?= $base ?>/chat.php?id=<?= $t['id'] ?>"><?= htmlspecialchars($t['title']) ?></a>
+      <a href="<?= $base ?>/image-chat/<?= $t['id'] ?>"><?= htmlspecialchars($t['title']) ?></a>
       <div class="meta"><?= $t['created_at'] ?></div>
     </li>
     <?php endforeach; ?>

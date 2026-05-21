@@ -2,5 +2,6 @@ RewriteEngine On
 
 Header set Access-Control-Allow-Origin "*"
 
+RewriteRule ^image-chat/(.*)$  chat.php?id=$1 [L]
 RewriteRule ^image/(.*)$  image.php?id=$1 [L]
 

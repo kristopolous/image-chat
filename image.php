@@ -51,18 +51,33 @@ file_put_contents($mdFile, $md);
 $pdfFile = $tmpdir . '/ichat_' . uniqid() . '.pdf';
 $pngPrefix = $tmpdir . '/ichat_' . uniqid();
 
+// Load style preset
+$styleName = $thread['style'] ?? 'default';
+$styleFile = __DIR__ . '/styles/' . basename($styleName) . '.css';
+$styleSheet = null;
+if (file_exists($styleFile)) {
+  $styleSheet = tempnam($tmpdir, 'ichat_css_');
+  file_put_contents($styleSheet, file_get_contents($styleFile));
+}
+
 // Pandoc → PDF via WeasyPrint
 $template = __DIR__ . '/templates/chat-default.html';
+$styleOpts = '';
+if ($styleSheet) {
+  $styleOpts = '--pdf-engine-opt=-s --pdf-engine-opt=' . escapeshellarg($styleSheet) . ' ';
+}
 $cmd = sprintf(
-  "pandoc %s --template=%s -V title=%s -o %s -f markdown -t html --pdf-engine=weasyprint 2>&1",
+  "pandoc %s --template=%s -V title=%s -o %s -f markdown -t html --pdf-engine=weasyprint %s 2>&1",
   escapeshellarg($mdFile),
   escapeshellarg($template),
   escapeshellarg($thread['title']),
-  escapeshellarg($pdfFile)
+  escapeshellarg($pdfFile),
+  $styleOpts
 );
 exec($cmd, $output, $ret);
 if ($ret !== 0) {
   unlink($mdFile);
+  if ($styleSheet) @unlink($styleSheet);
   http_response_code(500);
   die('pandoc failed: ' . implode("\n", $output));
 }
@@ -78,6 +93,7 @@ exec(
 $pngFile = $pngPrefix . '-1.png';
 if ($ret !== 0 || !file_exists($pngFile)) {
   unlink($mdFile); unlink($pdfFile);
+  if ($styleSheet) @unlink($styleSheet);
   http_response_code(500);
   die('pdftoppm failed: ' . implode("\n", $output));
 }
@@ -147,6 +163,7 @@ readfile($outFile);
 unlink($mdFile);
 unlink($pdfFile);
 unlink($pngFile);
+if ($styleSheet) @unlink($styleSheet);
 if (isset($qrFile) && $qrFile) @unlink($qrFile);
 if (isset($finalFile)) @unlink($finalFile);
 if (isset($fmtFile)) @unlink($fmtFile);

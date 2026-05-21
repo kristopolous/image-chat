@@ -1,0 +1,31 @@
+body {
+  font-family: -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #1a1a1a;
+  background: #fff;
+  padding: 16px;
+}
+
+.thread-header {
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #333;
+}
+
+.thread-header h1 {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+p {
+  padding: 5px 8px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+p:nth-child(odd) {
+  background: #f6f6f8;
+}
