@@ -102,7 +102,7 @@ if ($ret !== 0 || !file_exists($pngFile)) {
 $basePath = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
 $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http')
   . '://' . $_SERVER['HTTP_HOST'] . $basePath;
-$qrUrl = $baseUrl . '/chat.php?id=' . $id;
+$qrUrl = $baseUrl . '/' . $id;
 $qrFile = $tmpdir . '/ichat_' . uniqid() . '.png';
 
 exec(

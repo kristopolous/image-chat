@@ -31,13 +31,22 @@ if ($restricted && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['unlock
   }
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_title'])) {
+  $newTitle = trim($_POST['edit_title']);
+  if ($newTitle !== '') {
+    $stmt = $pdo->prepare('UPDATE image_chats SET title = ? WHERE id = ?');
+    $stmt->execute([$newTitle, $id]);
+    $thread['title'] = $newTitle;
+  }
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['author']) && (!$restricted || $unlocked)) {
   $author = trim($_POST['author']);
   $body   = trim($_POST['body'] ?? '');
   if ($author !== '' && $body !== '') {
     $stmt = $pdo->prepare('INSERT INTO comments (thread_id, author, body) VALUES (?, ?, ?)');
     $stmt->execute([$id, $author, $body]);
-    header('Location: ' . $base . '/chat.php?id=' . $id);
+    header('Location: ' . $base . '/' . $id);
     exit;
   }
 }
@@ -59,7 +68,14 @@ $comments = $comments->fetchAll();
     max-width: 640px; margin: 40px auto; padding: 0 20px;
     color: #1a1a1a;
   }
-  h1 { font-size: 22px; margin-bottom: 4px; }
+  h1 { font-size: 22px; margin-bottom: 4px; display:inline; }
+  .title-row { margin-bottom: 4px; display:flex; align-items:center; gap:8px; }
+  .title-row h1 { margin-bottom:0; }
+  .pencil { cursor:pointer; font-size:16px; color:#aaa; user-select:none; }
+  .pencil:hover { color:#555; }
+  .title-edit { display:none; margin-bottom: 4px; }
+  .title-edit input { padding:6px 10px; font-size:15px; border:1px solid #ccc; border-radius:6px; width:300px; }
+  .title-edit button { padding:6px 14px; font-size:13px; border:none; border-radius:6px; background:#333; color:#fff; cursor:pointer; }
   .back { font-size: 13px; margin-bottom: 20px; display: block; color: #888; }
   .back a { color: #555; }
 
@@ -94,14 +110,21 @@ $comments = $comments->fetchAll();
 </head>
 <body>
   <div class="back"><a href="<?= $base ?>/">&larr; image-chat</a></div>
-  <h1><?= htmlspecialchars($thread['title']) ?></h1>
+  <div class="title-row">
+    <h1 id="title-display"><?= htmlspecialchars($thread['title']) ?></h1>
+    <span class="pencil" id="pencil">✏️</span>
+  </div>
+  <form class="title-edit" id="title-form" method="post">
+    <input type="text" name="edit_title" id="title-input" value="<?= htmlspecialchars($thread['title']) ?>" required>
+    <button type="submit">update</button>
+  </form>
   <div class="meta-info" style="font-size:12px; color:#888;">
     style: <?= htmlspecialchars($thread['style'] ?? 'default') ?>
     <?php if ($restricted): ?>· 🔒 restricted<?php endif; ?>
   </div>
 
   <div style="margin: 16px 0;">
-    <img src="<?= $base ?>/image/<?= $id ?>.png" alt="<?= htmlspecialchars($thread['title']) ?>"
+    <img src="<?= $base ?>/image/<?= $id ?>.png?v=<?= time() ?>" alt="<?= htmlspecialchars($thread['title']) ?>"
          width="827" height="1166"
          style="max-width:100%; height:auto; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,.12);">
   </div>
@@ -126,6 +149,17 @@ $comments = $comments->fetchAll();
   <?php endif; ?>
 
   <script>
+    const pencil = document.getElementById('pencil');
+    const titleForm = document.getElementById('title-form');
+    const titleDisplay = document.getElementById('title-display');
+    const titleInput = document.getElementById('title-input');
+    pencil.addEventListener('click', () => {
+      titleForm.style.display = 'block';
+      pencil.style.display = 'none';
+      titleDisplay.style.display = 'none';
+      titleInput.focus();
+      titleInput.select();
+    });
     const author = document.getElementById('author');
     if (author) {
       const saved = localStorage.getItem('ichat_author');

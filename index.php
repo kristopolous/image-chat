@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'])) {
     if ($style === '') $style = 'default';
     $stmt = $pdo->prepare('INSERT INTO image_chats (title, password_hash, style) VALUES (?, ?, ?)');
     $stmt->execute([$title, $hash, $style]);
-    header('Location: ' . $base . '/image-chat/' . $pdo->lastInsertId());
+    header('Location: ' . $base . '/' . $pdo->lastInsertId());
     exit;
   }
 }
@@ -62,13 +62,12 @@ $threads = $pdo->query('SELECT id, title, created_at FROM image_chats ORDER BY c
 
   h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
   ul { list-style: none; }
-  li {
-    padding: 12px 16px; background: #f4f4f6; border-radius: 8px;
-    margin-bottom: 6px;
+  li a {
+    display: block; padding: 12px 16px; background: #f4f4f6; border-radius: 8px;
+    margin-bottom: 6px; color: #333; text-decoration: none; font-weight: 500;
   }
-  li a { color: #333; text-decoration: none; font-weight: 500; }
-  li a:hover { text-decoration: underline; }
-  .meta { font-size: 12px; color: #888; margin-top: 2px; }
+  li a:hover { background: #e4e4e6; }
+  .meta { font-size: 12px; color: #888; margin-top: 2px; font-weight: 400; }
 </style>
 </head>
 <body>
@@ -116,6 +115,7 @@ $threads = $pdo->query('SELECT id, title, created_at FROM image_chats ORDER BY c
         <select name="style" style="width:100%; padding:10px 14px; font-size:14px; border:1px solid #ccc; border-radius:8px;">
           <option value="default">default</option>
           <option value="vintage">vintage</option>
+          <option value="candy">candy</option>
         </select>
       </div>
     </form>
@@ -125,7 +125,7 @@ $threads = $pdo->query('SELECT id, title, created_at FROM image_chats ORDER BY c
   <ul>
     <?php foreach ($threads as $t): ?>
     <li>
-      <a href="<?= $base ?>/image-chat/<?= $t['id'] ?>"><?= htmlspecialchars($t['title']) ?></a>
+      <a href="<?= $base ?>/<?= $t['id'] ?>"><?= htmlspecialchars($t['title']) ?></a>
       <div class="meta"><?= $t['created_at'] ?></div>
     </li>
     <?php endforeach; ?>
