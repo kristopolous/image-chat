@@ -127,17 +127,26 @@ $comments = $comments->fetchAll();
     padding: 0.5rem 0;
     font-size: 0.9rem;
   }
+  aside {
+    background: #eee;
+    padding: 0 0.75rem;
+    border: 1px solid #aaa;
+    margin-bottom: 2rem;
+  }
 </style>
 </head>
 <body>
-  <div class="back"><a href="<?= $base ?>/">&larr; image-chat</a></div>
+  <aside>
   <p>
-    Image-chat is a comment thread that lives inside an image.
+    <b>Image-chat</b> is a new concept: A comment thread that lives inside an image.
   </p>
   <p>
-    You can have comment threads in places you normally wouldn't, such as in your GitHub readme. It will work on any site where you can include an image with an external URL. 
+    This means you can have comment threads in places you normally wouldn't, such as in your GitHub README. It will work on any site where you can include an image with an external URL.</p>
+  <center>  <a href="/image-chat/">Create one!</a></center>
   </p>
+</aside>
   <div class="embed" style="text-align:center;margin-top:1rem">
+    URL to include for this chat:
     <strong>🔗 <a href="<?= $baseUrl ?>/image/<?= $id ?>.webp"><?= $baseUrl ?>/image/<?= $id ?>.webp</a></strong>
   </div>
   <div class="title-row">

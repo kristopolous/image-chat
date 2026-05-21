@@ -14,6 +14,10 @@ You embed this:
 
 And the image is a live chat thread. Refresh the page and new comments show up in the picture.
 
+For instance:
+
+<img src=https://9ol.es/image-chat/image/1.webp />
+
 ## How it works
 
 1. Create a chat on the web UI
