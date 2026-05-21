@@ -8,6 +8,8 @@ Someone scans the QR code in the corner, gets taken to a page, writes something.
 
 **image-chat** is that.
 
+[**Try it out!**](https://9ol.es/image-chat)
+
 You embed this:
 
     <img src="https://your.site/image/123.png">
