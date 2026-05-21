@@ -23,7 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($author !== '' && $body !== '') {
     $stmt = $pdo->prepare('INSERT INTO comments (thread_id, author, body) VALUES (?, ?, ?)');
     $stmt->execute([$id, $author, $body]);
-    header('Location: /chat.php?id=' . $id);
+    $base = dirname($_SERVER['SCRIPT_NAME']);
+    header('Location: ' . $base . '/chat.php?id=' . $id);
     exit;
   }
 }
@@ -76,11 +77,11 @@ $comments = $comments->fetchAll();
 </style>
 </head>
 <body>
-  <div class="back"><a href="/">&larr; image-chat</a></div>
+  <div class="back"><a href="<?= dirname($_SERVER['SCRIPT_NAME']) ?>/">&larr; image-chat</a></div>
   <h1><?= htmlspecialchars($thread['title']) ?></h1>
 
   <div class="embed">
-    embed: <code>&lt;img src="/image/<?= $id ?>.png" alt="<?= htmlspecialchars($thread['title']) ?>"&gt;</code>
+    embed: <code>&lt;img src="<?= $base ?>/image/<?= $id ?>.png" alt="<?= htmlspecialchars($thread['title']) ?>"&gt;</code>
   </div>
 
   <?php foreach ($comments as $c): ?>

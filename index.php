@@ -7,7 +7,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'])) {
   if ($title !== '') {
     $stmt = $pdo->prepare('INSERT INTO image_chats (title) VALUES (?)');
     $stmt->execute([$title]);
-    header('Location: /chat.php?id=' . $pdo->lastInsertId());
+    $base = dirname($_SERVER['SCRIPT_NAME']);
+    header('Location: ' . $base . '/chat.php?id=' . $pdo->lastInsertId());
     exit;
   }
 }
