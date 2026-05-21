@@ -174,7 +174,7 @@ if ($ret !== 0) {
 if ($qrFile && file_exists($qrFile)) {
   $finalFile = $tmpdir . '/ichat_' . uniqid() . '.png';
   exec(
-    sprintf("composite -gravity southeast -geometry +20+20 %s %s %s 2>&1",
+    sprintf("composite -gravity northeast -geometry +20+20 %s %s %s 2>&1",
       escapeshellarg($qrFile),
       escapeshellarg($pngFile),
       escapeshellarg($finalFile)

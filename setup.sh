@@ -11,6 +11,11 @@ if ! command -v weasyprint &>/dev/null; then
   sudo apt-get update && sudo apt-get install -y weasyprint || true
 fi
 
+if ! command -v qrencode &>/dev/null; then
+  echo "installing qrencode ..."
+  sudo apt-get update && sudo apt-get install -y qrencode || true
+fi
+
 if ! command -v docker &>/dev/null; then
   echo "installing docker ..."
   curl -fsSL https://get.docker.com | sh
