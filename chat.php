@@ -123,14 +123,23 @@ $comments = $comments->fetchAll();
   form button:hover { background: #555; }
   .error { color: #c33; font-size: 13px; margin-bottom: 8px; }
   .restricted-note { font-size: 12px; color: #888; margin-top: 4px; }
+  p {
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+  }
 </style>
 </head>
 <body>
   <div class="back"><a href="<?= $base ?>/">&larr; image-chat</a></div>
-  <p style="font-size:13px; color:#666; margin-bottom:16px; line-height:1.5;">
-    This is an image-chat — a comment thread that lives inside an image.
-    Post a comment below. Refresh the image URL to see it appear on the image itself.
+  <p>
+    Image-chat is a comment thread that lives inside an image.
   </p>
+  <p>
+    You can have comment threads in places you normally wouldn't, such as in your GitHub readme. It will work on any site where you can include an image with an external URL. 
+  </p>
+  <div class="embed" style="text-align:center;margin-top:1rem">
+    <strong>🔗 <a href="<?= $baseUrl ?>/image/<?= $id ?>.webp"><?= $baseUrl ?>/image/<?= $id ?>.webp</a></strong>
+  </div>
   <div class="title-row">
     <h1 id="title-display"><?= htmlspecialchars($thread['title']) ?></h1>
     <span class="pencil" id="pencil">✏️</span>
@@ -150,9 +159,6 @@ $comments = $comments->fetchAll();
     <?php if ($restricted): ?>· 🔒 restricted<?php endif; ?>
   </div>
 
-  <div class="embed" style="text-align:center;">
-    <strong><a href="<?= $baseUrl ?>/image/<?= $id ?>.png"><?= $baseUrl ?>/image/<?= $id ?>.png</a></strong>
-  </div>
 
   <div style="margin: 16px 0;">
     <img src="<?= $base ?>/image/<?= $id ?>.png?v=<?= time() ?>" alt="<?= htmlspecialchars($thread['title']) ?>"
