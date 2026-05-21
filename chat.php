@@ -210,5 +210,8 @@ $comments = $comments->fetchAll();
       author.addEventListener('input', () => localStorage.setItem('ichat_author', author.value));
     }
   </script>
+  <p style="margin-top:32px; font-size:12px; color:#aaa; text-align:center;">
+    <a href="https://github.com/kristopolous/image-chat" style="color:#aaa;">source code</a>
+  </p>
 </body>
 </html>

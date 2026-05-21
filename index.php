@@ -139,5 +139,8 @@ $threads = $pdo->query('SELECT id, title, created_at FROM image_chats ORDER BY c
     <li style="color:#888;">none yet</li>
     <?php endif; ?>
   </ul>
+  <p style="margin-top:32px; font-size:12px; color:#aaa; text-align:center;">
+    <a href="https://github.com/kristopolous/image-chat" style="color:#aaa;">source code</a>
+  </p>
 </body>
 </html>
