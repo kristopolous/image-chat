@@ -14,7 +14,9 @@ And the image is a live chat thread. Refresh the page and new comments show up i
 
 For instance:
 
-<img src=https://9ol.es/image-chat/image/1.webp />
+<img src=https://9ol.es/image-chat/image/1.webp?1 />
+
+(Github occasionally refreshes so there's a time delay)
 
 ## How it works
 
