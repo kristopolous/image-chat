@@ -20,7 +20,7 @@ For instance:
 
 1. Create a chat on the web UI
 2. Copy the embed `<img>` tag
-3. Paste it anywhere images work — GitHub, forums, emails, whatever
+3. Paste it anywhere images work 
 4. People scan the QR code, leave a comment, reload
 5. The server renders all comments onto the image using pandoc → wkhtmltopdf → rasterize → composite
 
@@ -38,7 +38,7 @@ php -S localhost:8080
 # Visit localhost:8080, create a chat, grab the embed code
 ```
 
-You'll need `PHP`, `sqlite`, `pandoc`, `weasyprint`, and `ImageMagick` or `poppler-utils` installed for the render pipeline.
+You'll need `PHP`, `mysql/mariadb`, `pandoc`, `weasyprint`, and `ImageMagick` or `poppler-utils` installed for the render pipeline.
 
 ## What's here
 
