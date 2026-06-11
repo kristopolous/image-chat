@@ -104,7 +104,7 @@ $pngPrefix = $tmpdir . '/ichat_' . uniqid();
 
 // Load style preset
 $styleName = $thread['style'] ?? 'default';
-$styleFile = __DIR__ . '/styles/' . basename($styleName) . '.css';
+$styleFile = __DIR__ . '/../styles/' . basename($styleName) . '.css';
 $styleSheet = null;
 if (file_exists($styleFile)) {
   $styleSheet = tempnam($tmpdir, 'ichat_css_');
@@ -112,7 +112,7 @@ if (file_exists($styleFile)) {
 }
 
 // Pandoc → PDF via WeasyPrint
-$template = __DIR__ . '/templates/chat-default.html';
+$template = __DIR__ . '/../templates/chat-default.html';
 $styleOpts = '';
 if ($styleSheet) {
   $styleOpts = '--pdf-engine-opt=-s --pdf-engine-opt=' . escapeshellarg($styleSheet) . ' ';
