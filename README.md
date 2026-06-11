@@ -38,16 +38,16 @@ php -S localhost:8080
 # Visit localhost:8080, create a chat, grab the embed code
 ```
 
-You'll need PHP, MySQL, pandoc, weasyprint, and ImageMagick or poppler-utils installed for the render pipeline.
+You'll need `PHP`, `sqlite`, `pandoc`, `weasyprint`, and `ImageMagick` or `poppler-utils` installed for the render pipeline.
 
 ## What's here
 
-- `index.php` — create and list chats
-- `chat.php` — view thread and post comments
-- `image.php` — the image renderer (pipeline is stubbed, needs the toolchain wired in)
-- `templates/chat-default.html` — a stylesheet for how the chat looks in the image
-- `schema.sql` — MySQL tables
-- `docker-compose.yml` + `setup.sh` — spins up MySQL with random credentials
+- `web/index.php`: create and list chats
+- `web/chat.php`: view thread and post comments
+- `web/image.php`: the image renderer (pipeline is stubbed, needs the toolchain wired in)
+- `templates/chat-default.html`: a stylesheet for how the chat looks in the image
+- `misc/schema.sql`: MySQL tables
+- `misc/docker-compose.yml` + `misc/setup.sh`: spins up MySQL with random credentials
 
 ## FAQ
 
