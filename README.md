@@ -1,5 +1,3 @@
-# image-chat
-
 **The problem**: You want to have a discussion on a GitHub README, a forum signature, or an eBay listing. None of those let you post comments. They only render images.
 
 What if the image *was* the comment thread?
