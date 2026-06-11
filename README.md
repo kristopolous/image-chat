@@ -51,11 +51,10 @@ You'll need `PHP`, `mysql/mariadb`, `pandoc`, `weasyprint`, and `ImageMagick` or
 
 ## FAQ
 
-- Q: Is this anonymous?
-- A: For now. Pick a username. No accounts. SSO when I feel like it.
+Q: Is this anonymous?
 
-- Q: Can I style my chat?
-- A: Swap the template in `templates/`. Future maybe: per-chat templates.
+A: For now. Pick a username. No accounts. SSO when I feel like it.
 
-- Q: Why 250 characters?
-- A: It's an image. There isn't infinite room. Write a blog post if you need more.
+Q: Can I style my chat?
+
+A: Swap the template in `templates/`. Future maybe: per-chat templates.
