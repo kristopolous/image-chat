@@ -4,8 +4,6 @@ What if the image *was* the comment thread?
 
 Someone scans the QR code in the corner, gets taken to a page, writes something. Next time that image loads, their comment is rendered onto it.
 
-**image-chat** is that.
-
 [**Try it out!**](https://9ol.es/image-chat)
 
 You embed this:
