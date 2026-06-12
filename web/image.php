@@ -48,7 +48,15 @@ if (file_exists($cacheFile)) {
 
   if ($cacheTime >= max($created, $latest)) {
     header('Content-Type: ' . $content_types[$fmt]);
-    header('Cache-Control: public, max-age=31536000, immutable');
+    header('Cache-Control: public, max-age=60, must-revalidate');
+    header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $cacheTime) . ' GMT');
+    if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+      $since = strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']);
+      if ($since >= $cacheTime) {
+        http_response_code(304);
+        exit;
+      }
+    }
     readfile($cacheFile);
     exit;
   }
@@ -207,7 +215,8 @@ if (!is_dir(__DIR__ . '/cache')) {
 $copied = copy($outFile, $cacheFile);
 error_log("image.php: cache copy from=$outFile to=$cacheFile result=" . ($copied ? 'ok' : 'FAIL'));
 header('Content-Type: ' . $content_types[$fmt]);
-header('Cache-Control: public, max-age=31536000, immutable');
+header('Cache-Control: public, max-age=60, must-revalidate');
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($cacheFile)) . ' GMT');
 http_response_code(200);
 $sent = readfile($cacheFile);
 error_log("image.php: readfile sent=$sent bytes");
