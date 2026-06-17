@@ -1,16 +1,8 @@
 services:
-  db:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: imgchat
-      MYSQL_USER: imgchat
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  app:
+    build: .
     ports:
-      - 33065:3306
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./misc/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
-
-volumes:
-  mysql_data:
+      - "8080:80"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-changeme}
