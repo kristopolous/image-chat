@@ -34,7 +34,7 @@ EOSQL
 
 mysql -u root imgchat < /var/www/html/misc/schema.sql
 
-cat > /var/www/html/.env <<-EOF
+cat > /var/www/html/web/.env <<-EOF
 MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
 MYSQL_PASSWORD=${MYSQL_PASSWORD}
 EOF
