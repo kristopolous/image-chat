@@ -1,0 +1,6 @@
+Options -MultiViews
+RewriteEngine On
+RewriteRule ^debug/(\d+)$  debug.php?id=$1 [L]
+RewriteRule ^(\d+)$  chat.php?id=$1 [L]
+RewriteRule ^image/(.*)$  image.php?id=$1 [L]
+Header set Access-Control-Allow-Origin "*"

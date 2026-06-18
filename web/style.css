@@ -1,0 +1,191 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  max-width: 640px; margin: 40px auto; padding: 0 20px;
+  color: #1a1a1a;
+  line-height: 1.6;
+}
+
+h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+
+h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+
+p { padding: 0.5rem 0; font-size: 0.9rem; }
+
+ul { list-style: none; }
+
+/* ---- index.php ---- */
+
+.subhead { font-size: 15px; color: #666; margin-bottom: 32px; }
+
+.intro {
+  margin-bottom: 24px; font-size: 14px; line-height: 1.6; color: #444;
+}
+
+.steps { margin-bottom: 32px; }
+
+.step {
+  display: flex; gap: 14px; margin-bottom: 14px;
+  padding: 14px 16px; background: #f4f4f6; border-radius: 10px;
+}
+
+.step-num {
+  font-weight: 700; font-size: 14px; color: #888; min-width: 24px;
+}
+
+.step-body { font-size: 14px; color: #333; }
+
+.step-body strong { color: #111; }
+
+.step-body code {
+  background: #e4e4e6; padding: 2px 6px; border-radius: 4px; font-size: 12px;
+}
+
+.divider { border: none; border-top: 1px solid #ddd; margin: 28px 0; }
+
+.create-box { margin-bottom: 28px; }
+
+.create-box label { font-size: 14px; font-weight: 600; display: block; margin-bottom: 8px; }
+
+.create-form { margin-bottom: 28px; }
+
+.input-full {
+  width: 100%; padding: 10px 14px; font-size: 15px;
+  border: 1px solid #ccc; border-radius: 8px;
+}
+
+.input-full-wrap { margin-bottom: 8px; }
+
+.flex-row { display: flex; gap: 8px; margin-bottom: 8px; }
+
+.input-flex {
+  flex: 1; padding: 10px 14px; font-size: 15px;
+  border: 1px solid #ccc; border-radius: 8px;
+}
+
+.btn {
+  padding: 10px 20px; font-size: 14px; border: none;
+  border-radius: 8px; background: #333; color: #fff;
+  cursor: pointer; white-space: nowrap;
+}
+
+.btn:hover { background: #555; }
+
+.thread-list li a {
+  display: block; padding: 12px 16px; background: #f4f4f6; border-radius: 8px;
+  margin-bottom: 6px; color: #333; text-decoration: none; font-weight: 500;
+}
+
+.thread-list li a:hover { background: #e4e4e6; }
+
+.meta { font-size: 12px; color: #888; margin-top: 2px; font-weight: 400; }
+
+.empty { color: #888; }
+
+.footer {
+  margin-top: 32px; font-size: 12px; color: #aaa; text-align: center;
+}
+
+.footer a { color: #aaa; }
+
+/* ---- chat.php ---- */
+
+.chat-h1 {
+  font-size: 22px; margin-bottom: 4px; display: inline;
+}
+
+.title-row {
+  margin-bottom: 4px; display: flex; align-items: center; gap: 8px;
+}
+
+.title-row h1 { margin-bottom: 0; }
+
+.pencil {
+  cursor: pointer; font-size: 16px; color: #aaa; user-select: none;
+}
+
+.pencil:hover { color: #555; }
+
+.title-edit { display: none; margin-bottom: 4px; }
+
+.title-edit input {
+  padding: 6px 10px; font-size: 15px;
+  border: 1px solid #ccc; border-radius: 6px; width: 300px;
+}
+
+.title-edit select {
+  padding: 6px 10px; font-size: 13px;
+  border: 1px solid #ccc; border-radius: 6px;
+}
+
+.title-edit button {
+  padding: 6px 14px; font-size: 13px; border: none;
+  border-radius: 6px; background: #333; color: #fff; cursor: pointer;
+}
+
+.title-edit {
+  border-top: none !important; margin-top: 0 !important; padding-top: 0 !important;
+}
+
+.embed-wrap { text-align: center; margin-top: 1rem; }
+
+.embed { font-size: 13px; margin-bottom: 24px; }
+
+.embed code {
+  background: #f4f4f6; padding: 6px 10px; border-radius: 6px;
+  font-size: 12px; display: inline-block;
+}
+
+.comment { padding: 12px 0; border-bottom: 1px solid #eee; }
+
+.comment:last-child { border-bottom: none; }
+
+.comment-head { font-size: 13px; margin-bottom: 2px; }
+
+.comment-author { font-weight: 600; color: #333; }
+
+.comment-time { color: #aaa; margin-left: 6px; }
+
+.comment-body { font-size: 14px; line-height: 1.5; color: #444; }
+
+.chat-form {
+  margin-top: 24px; padding-top: 20px; border-top: 1px solid #ddd;
+}
+
+.chat-form input, .chat-form textarea {
+  width: 100%; padding: 10px 14px; font-size: 14px;
+  border: 1px solid #ccc; border-radius: 8px; margin-bottom: 10px;
+  font-family: inherit;
+}
+
+.chat-form textarea { resize: vertical; min-height: 60px; }
+
+.chat-form button {
+  padding: 10px 20px; font-size: 14px; border: none;
+  border-radius: 8px; background: #333; color: #fff; cursor: pointer;
+}
+
+.chat-form button:hover { background: #555; }
+
+.error { color: #c33; font-size: 13px; margin-bottom: 8px; }
+
+.restricted-note { font-size: 12px; color: #888; margin-top: 4px; }
+
+.back { font-size: 13px; margin-bottom: 20px; display: block; color: #888; }
+
+.back a { color: #555; }
+
+.banner {
+  background: #eee; padding: 0 0.75rem;
+  border: 1px solid #aaa; margin-bottom: 2rem;
+}
+
+.meta-info { font-size: 12px; color: #888; }
+
+.thread-img {
+  max-width: 100%; height: auto;
+  border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.12);
+}
+
+.img-wrap { margin: 16px 0; }

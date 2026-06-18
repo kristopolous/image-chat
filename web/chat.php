@@ -17,7 +17,7 @@ if (!$thread) {
   die('not found');
 }
 
-$base = dirname($_SERVER['SCRIPT_NAME']);
+$base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
 $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http')
   . '://' . $_SERVER['HTTP_HOST'] . $base;
 $restricted = $thread['password_hash'] !== null;
@@ -77,67 +77,10 @@ $comments = $comments->fetchAll();
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= htmlspecialchars($thread['title']) ?> — image-chat</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    max-width: 640px; margin: 40px auto; padding: 0 20px;
-    color: #1a1a1a;
-  }
-  h1 { font-size: 22px; margin-bottom: 4px; display:inline; }
-  .title-row { margin-bottom: 4px; display:flex; align-items:center; gap:8px; }
-  .title-row h1 { margin-bottom:0; }
-  .pencil { cursor:pointer; font-size:16px; color:#aaa; user-select:none; }
-  .pencil:hover { color:#555; }
-  .title-edit { display:none; margin-bottom: 4px; }
-  .title-edit input { padding:6px 10px; font-size:15px; border:1px solid #ccc; border-radius:6px; width:300px; }
-  .title-edit select { padding:6px 10px; font-size:13px; border:1px solid #ccc; border-radius:6px; }
-  .title-edit button { padding:6px 14px; font-size:13px; border:none; border-radius:6px; background:#333; color:#fff; cursor:pointer; }
-  .title-edit { border-top: none !important; margin-top: 0 !important; padding-top: 0 !important; }
-  .back { font-size: 13px; margin-bottom: 20px; display: block; color: #888; }
-  .back a { color: #555; }
-
-  .embed { font-size: 13px; margin-bottom: 24px; }
-  .embed code {
-    background: #f4f4f6; padding: 6px 10px; border-radius: 6px;
-    font-size: 12px; display: inline-block;
-  }
-
-  .comment { padding: 12px 0; border-bottom: 1px solid #eee; }
-  .comment:last-child { border-bottom: none; }
-  .comment-head { font-size: 13px; margin-bottom: 2px; }
-  .comment-author { font-weight: 600; color: #333; }
-  .comment-time { color: #aaa; margin-left: 6px; }
-  .comment-body { font-size: 14px; line-height: 1.5; color: #444; }
-
-  form { margin-top: 24px; padding-top: 20px; border-top: 1px solid #ddd; }
-  form input, form textarea {
-    width: 100%; padding: 10px 14px; font-size: 14px;
-    border: 1px solid #ccc; border-radius: 8px; margin-bottom: 10px;
-    font-family: inherit;
-  }
-  form textarea { resize: vertical; min-height: 60px; }
-  form button {
-    padding: 10px 20px; font-size: 14px; border: none;
-    border-radius: 8px; background: #333; color: #fff; cursor: pointer;
-  }
-  form button:hover { background: #555; }
-  .error { color: #c33; font-size: 13px; margin-bottom: 8px; }
-  .restricted-note { font-size: 12px; color: #888; margin-top: 4px; }
-  p {
-    padding: 0.5rem 0;
-    font-size: 0.9rem;
-  }
-  aside {
-    background: #eee;
-    padding: 0 0.75rem;
-    border: 1px solid #aaa;
-    margin-bottom: 2rem;
-  }
-</style>
+<link rel="stylesheet" href="<?= $base ?>/style.css">
 </head>
 <body>
-  <aside>
+  <aside class="banner">
   <p>
     <b>Image-chat</b> is a new concept: A comment thread that lives inside an image.
   </p>
@@ -146,12 +89,12 @@ $comments = $comments->fetchAll();
   <center>  <a href="/image-chat/">Create one!</a></center>
   </p>
 </aside>
-  <div class="embed" style="text-align:center;margin-top:1rem">
+  <div class="embed embed-wrap">
     URL to include for this chat:
-    <strong>🔗 <a href="<?= $baseUrl ?>/image/<?= $id ?>.webp"><?= $baseUrl ?>/image/<?= $id ?>.webp</a></strong>
+    <strong><a href="<?= $baseUrl ?>/image/<?= $id ?>.webp"><?= $baseUrl ?>/image/<?= $id ?>.webp</a></strong>
   </div>
   <div class="title-row">
-    <h1 id="title-display"><?= htmlspecialchars($thread['title']) ?></h1>
+    <h1 class="chat-h1" id="title-display"><?= htmlspecialchars($thread['title']) ?></h1>
     <span class="pencil" id="pencil">✏️</span>
   </div>
   <form class="title-edit" id="title-form" method="post">
@@ -164,27 +107,25 @@ $comments = $comments->fetchAll();
     </select>
     <button type="submit">update</button>
   </form>
-  <div class="meta-info" style="font-size:12px; color:#888;">
+  <div class="meta-info">
     style: <?= htmlspecialchars($thread['style'] ?? 'default') ?>
-    <?php if ($restricted): ?>· 🔒 restricted<?php endif; ?>
+    <?php if ($restricted): ?>· restricted<?php endif; ?>
   </div>
 
-
-  <div style="margin: 16px 0;">
+  <div class="img-wrap">
     <img src="<?= $base ?>/image/<?= $id ?>.png?v=<?= time() ?>" alt="<?= htmlspecialchars($thread['title']) ?>"
-         width="827" height="1166"
-         style="max-width:100%; height:auto; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,.12);">
+         width="827" height="1166" class="thread-img">
   </div>
 
   <?php if ($error): ?><div class="error"><?= $error ?></div><?php endif; ?>
 
   <?php if ($restricted && !$unlocked): ?>
-  <form method="post">
+  <form method="post" class="chat-form">
     <input type="text" name="unlock_pass" placeholder="password required to comment" required autofocus>
     <button type="submit">unlock</button>
   </form>
   <?php else: ?>
-  <form method="post">
+  <form method="post" class="chat-form">
     <input type="text" name="author" id="author" placeholder="your name" maxlength="20" required>
     <textarea name="body" placeholder="write something..." maxlength="250" required></textarea>
     <button type="submit">comment</button>
@@ -210,8 +151,8 @@ $comments = $comments->fetchAll();
       author.addEventListener('input', () => localStorage.setItem('ichat_author', author.value));
     }
   </script>
-  <p style="margin-top:32px; font-size:12px; color:#aaa; text-align:center;">
-    <a href="https://github.com/kristopolous/image-chat" style="color:#aaa;">source code</a>
+  <p class="footer">
+    <a href="https://github.com/kristopolous/image-chat">source code</a>
   </p>
 </body>
 </html>
