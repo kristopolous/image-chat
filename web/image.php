@@ -126,9 +126,10 @@ if ($styleSheet) {
   $styleOpts = '--pdf-engine-opt=-s --pdf-engine-opt=' . escapeshellarg($styleSheet) . ' ';
 }
 $cmd = sprintf(
-  "pandoc %s --template=%s -V title=%s -o %s -f markdown -t html --pdf-engine=weasyprint %s 2>&1",
+  "cd /tmp && pandoc %s --template=%s -V title=%s -M title=%s -o %s -f markdown -t html --pdf-engine=weasyprint %s 2>&1",
   escapeshellarg($mdFile),
   escapeshellarg($template),
+  escapeshellarg($thread['title']),
   escapeshellarg($thread['title']),
   escapeshellarg($pdfFile),
   $styleOpts

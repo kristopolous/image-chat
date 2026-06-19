@@ -32,7 +32,11 @@ mysql -u root <<-EOSQL
     FLUSH PRIVILEGES;
 EOSQL
 
-mysql -u root imgchat < /var/www/html/misc/schema.sql
+# Only run schema if tables don't exist yet
+TABLES=$(mysql -u root -N -B -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='imgchat'" 2>/dev/null || echo 0)
+if [ "$TABLES" = "0" ]; then
+  mysql -u root imgchat < /var/www/html/misc/schema.sql
+fi
 
 cat > /var/www/html/web/.env <<-EOF
 MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}

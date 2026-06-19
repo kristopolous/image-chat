@@ -13,10 +13,6 @@ body {
   border-bottom: 2px solid #333;
 }
 
-.thread-body {
-  height: 1090px;
-}
-
 .thread-header h1 {
   font-size: 15px;
   font-weight: 700;

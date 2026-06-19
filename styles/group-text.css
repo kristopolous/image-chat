@@ -14,10 +14,6 @@ body {
   border-bottom: 1px solid #e8e8ea;
 }
 
-.thread-body {
-  height: 1090px;
-}
-
 .thread-header h1 {
   font-size: 15px;
   font-weight: 600;
