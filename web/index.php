@@ -1,11 +1,7 @@
 <?php
 require_once __DIR__ . '/db.php';
 $pdo = get_pdo();
-<<<<<<< Updated upstream
-$base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
-=======
 $base = dirname(dirname($_SERVER['SCRIPT_NAME']));
->>>>>>> Stashed changes
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'])) {
   $title = trim($_POST['title']);
