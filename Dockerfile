@@ -1,7 +1,7 @@
 FROM php:8.2-apache-bookworm
 
-ENV MYSQL_PASSWORD=changeme
-ENV MYSQL_ROOT_PASSWORD=rootpass
+ENV MYSQL_PASSWORD=dK9AI1M8VvZ7XtVu8TYTVKhBZoVCE1s2
+ENV MYSQL_ROOT_PASSWORD=2hmwpbZp2qAkMGUE0WygL38_JVws4tms
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     mariadb-server \

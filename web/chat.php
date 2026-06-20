@@ -17,7 +17,11 @@ if (!$thread) {
   die('not found');
 }
 
+<<<<<<< Updated upstream
 $base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
+=======
+$base = dirname(dirname($_SERVER['SCRIPT_NAME']));
+>>>>>>> Stashed changes
 $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http')
   . '://' . $_SERVER['HTTP_HOST'] . $base;
 $restricted = $thread['password_hash'] !== null;

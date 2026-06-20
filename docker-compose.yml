@@ -6,5 +6,5 @@ services:
     ports:
       - "8080:80"
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-changeme}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-2hmwpbZp2qAkMGUE0WygL38_JVws4tms}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-dK9AI1M8VvZ7XtVu8TYTVKhBZoVCE1s2}
