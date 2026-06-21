@@ -10,3 +10,7 @@ RewriteRule ^debug/(\d+)$  web/debug.php?id=$1 [L]
 RewriteRule ^(\d+)$  web/chat.php?id=$1 [L]
 RewriteRule ^image/(.*)$  web/image.php?id=$1 [L]
 
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$  web/$1 [L]
+
